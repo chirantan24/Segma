@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block b1 %}
+{%load static%}
+<h1>{{object.username}}</h1>
+{% if not following %}
+<a href="{% url 'app:follow' pk=object.id%}" class="btn" id='login-submit'>Follow</a>
+{% endif %}
+{% endblock %}

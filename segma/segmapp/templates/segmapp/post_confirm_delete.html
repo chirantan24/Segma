@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block b1 %}
+<form class="login-form" method="post">
+{%csrf_token%}
+{{form.as_p}}
+<p><font size=32>Are You Sure You Want to Delete this post??</font></p>
+<input type="submit" class="btn btn-danger" value="Confirm">
+<a href="{%url 'app:detail' pk=object.id %}" class='btn btn-success'>Cancel</a>
+</form>
+{% endblock %}

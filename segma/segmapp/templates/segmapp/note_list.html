@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block b1 %}
+{%load static%}
+<h3>
+<ol>
+  {% for post in post_list %}
+    <li><a href="{{post.id}}" class="badge text-uppercase">{{post.title}}</a></li>
+    {% empty %}
+    <h1>No posts Added Yet!!</h1>
+    {% endfor %}
+</ol>
+</h3>
+<a href="{% url 'app:create' %}"><img src="{% static 'download.jpg' %}" height=70 class="border"/></a>
+{% endblock %}

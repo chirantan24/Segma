@@ -1,0 +1,13 @@
+{% extends 'segmapp/post_detail.html' %}
+{% block b2 %}
+{%load static%}
+<h3>Hey {{user}} !! Add your Comment on {{post.title}}!!</h3>
+<h4>Make Sure to Click on save to make your comment reach to {{post.writer}}</h4><br>
+<form  method="post" class="login-form">
+{%csrf_token%}
+{{form.as_p}}
+
+<input type="submit" class="btn" id="login-submit" value="Save">
+<a href="{% url 'app:posts'%}" class="btn" id="login-submit">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block b1 %}
+{%load static%}
+{% for object in object_list%}
+<a href="{% url 'profile' pk=object.id%}">{{object.username}}</a>
+<br>
+{% endfor %}
+{% endblock %}

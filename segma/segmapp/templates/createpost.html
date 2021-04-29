@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block b1 %}
+{% if not form.instance.pk %}
+{% load static%}
+<h1>Add Details For Your Post!!</h1>
+{% else %}
+<h1>Make Sure to Click on save!!</h1>
+{% endif %}
+<form  method="post" enctype="multipart/form-data"class="login-form">
+{%csrf_token%}
+{{form.as_p}}
+
+<input type="submit" class="btn" id="login-submit" value="Save">
+<a href="{% url 'app:posts'%}" class="btn" id="login-submit">Cancel</a>
+
+</form>
+{% endblock %}

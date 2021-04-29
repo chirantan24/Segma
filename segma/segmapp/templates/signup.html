@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block b1 %}
+  <h1>
+    <em>Enter Following Details to get started!!</em>
+  </h1>
+  <form method="post" class='login-form'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" id='signup-submit' value="Sign Up">
+  </form>
+{% endblock %}

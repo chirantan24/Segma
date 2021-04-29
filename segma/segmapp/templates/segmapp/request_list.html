@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block b1 %}
+{%load static%}
+<ol>
+  {%for i in object_list %}
+  <li><a href="{%url 'app:request' pk=i.id %}">{{i.by.username}}</a></li>
+  {% endfor %}
+</ol>
+{% endblock %}
