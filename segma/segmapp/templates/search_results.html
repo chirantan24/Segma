@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block b1 %}
 {%load static%}
+<ol>
+
 {% for object in object_list%}
-<a href="{% url 'profile' pk=object.id%}">{{object.username}}</a>
+<li><a href="{% url 'profile' pk=object.id%} " style="color:#fc037f">{{object.username}}</a></li>
 <br>
+
+</ol>
 {% endfor %}
 {% endblock %}

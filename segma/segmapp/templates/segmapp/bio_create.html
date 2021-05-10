@@ -18,11 +18,11 @@
     <img src="{{user.bio.profile_pic.url}}" id="pic" height="80%"/>
     <div class="row">
 <div class="col-sm-6" >
-<h4><a href="{%url 'followers'%}" style="color:#fab107">Followers</a></h4><br>
+<h4><a href="{%url 'followers' pk=user.id%} " style="color:#fab107">Followers</a></h4><br>
 <h5 class="text-center">{{followers}}</h5>
 </div>
 <div class="col-sm-6">
-  <h4><a href="{%url 'app:following'%}" style="color:#fab107">Following</a></h4><br>
+  <h4><a href="{%url 'app:following' pk=user.id%}" style="color:#fab107">Following</a></h4><br>
   <h5 class="text-center">{{following}}</h5>
 
 </div>

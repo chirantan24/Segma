@@ -4,7 +4,7 @@
 <h3>
 <ol>
   {% for post in post_list %}
-    <li><a href="{{post.id}}" class="badge text-uppercase">{{post.title}}</a></li>
+    <li><a href="{% url 'app:detail' pk=post.id%}" class="badge text-uppercase">{{post.title}}</a></li>
     {% empty %}
     <h1>No posts Added Yet!!</h1>
     {% endfor %}

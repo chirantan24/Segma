@@ -38,7 +38,7 @@
                   </li>
                   {% if b or user.is_authenticated %}
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'app:posts'%}">Posts</a>
+                    <a class="nav-link" href="{% url 'app:posts' pk=user.id%}">Posts</a>
                   </li>
                   <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -46,8 +46,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'requests'%}">Pending Requests</a>
-          <a class="dropdown-item" href="{% url 'app:following'%}">Following</a>
-          <a class="dropdown-item" href="{% url 'followers'%}">Followers</a>
+          <a class="dropdown-item" href="{% url 'app:following' pk=user.id%}">Following</a>
+          <a class="dropdown-item" href="{% url 'followers' pk=user.id%}">Followers</a>
         </div>
       </li>
                   <li class="nav-item">

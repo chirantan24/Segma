@@ -3,7 +3,7 @@
 {%load static%}
 <ol>
   {%for i in object_list %}
-  <li><a href="{%url 'app:request' pk=i.id %}">{{i.by.username}}</a></li>
+  <li><a href="{%url 'app:request' pk=i.id %}" style="color:#fc037f">{{i.by.username}}</a></li>
   {% endfor %}
 </ol>
 {% endblock %}

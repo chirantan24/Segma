@@ -40,7 +40,7 @@ class ListPosts(LoginRequiredMixin,ListView):
     login_url='login'
     model=models.Post
     def get_queryset(self,*args,**kwargs):
-        return models.Post.objects.all().filter(writer=self.request.user).order_by('-time_created');
+        return models.Post.objects.all().filter(writer=models.User.objects.get(id=self.kwargs['pk'])).order_by('-time_created');
 class EditPosts(LoginRequiredMixin,UpdateView):
     login_url='login'
     model=models.Post
@@ -120,8 +120,10 @@ class UserDetail(LoginRequiredMixin,DetailView):
     template_name='user_detail.html'
     def get_context_data(self,**kwargs):
         context=super(UserDetail,self).get_context_data(**kwargs)
-        b=models.Relation.objects.filter(follower=self.request.user,following=context['object']).count()
+        b=models.Relation.objects.filter(follower=context['object']).count()
+        a=models.Relation.objects.filter(following=context['object']).count()
         context['following']=b
+        context['followers']=a
         return context
 def follow(request,pk):
     following=User.objects.get(id=pk)
@@ -147,32 +149,28 @@ class RequestDetail(LoginRequiredMixin,DetailView):
     model=models.Request
     login_url='login'
     template_name='segmapp/accept_request.html'
+    def get_context_data(self,**kwargs):
+        context=super(RequestDetail,self).get_context_data(**kwargs)
+        b=models.Relation.objects.filter(follower=context['object'].by).count()
+        a=models.Relation.objects.filter(following=context['object'].by).count()
+        context['following']=b
+        context['followers']=a
+        context['user']=context['object'].by
+        return context
 class Followerlist(LoginRequiredMixin,ListView):
     model=models.Relation
     login_url='login'
     template_name='segmapp/followerlist.html'
     def get_queryset(self):
-        return models.Relation.objects.filter(following=self.request.user)
+        return models.Relation.objects.filter(following=self.kwargs['pk'])
 
 class Followinglist(LoginRequiredMixin,ListView):
     model=models.Relation
     login_url='login'
     template_name='segmapp/followinglist.html'
     def get_queryset(self):
-        return models.Relation.objects.filter(follower=self.request.user)
+        return models.Relation.objects.filter(follower=self.kwargs['pk'])
 
-# def make_bio(request):
-#     if request.method == "POST":
-#         b=forms.BioForm(data=request.POST)
-#         if b.is_valid():
-#             temp=b.save(commit=False)
-#             temp.user=request.user
-#             temp.save()
-#             b=forms.BioForm()
-#         return render(request,'index.html')
-#     else:
-#         b=forms.BioForm()
-#     return render(request,'segmapp/bio_create.html',context={'user':request.user,'form':b})
 class make_bio(LoginRequiredMixin,CreateView):
     model=models.Bio
     login_url='login'
@@ -187,10 +185,16 @@ class make_bio(LoginRequiredMixin,CreateView):
 class BioDetail(LoginRequiredMixin,DetailView):
     model=models.Bio
     login_url='login'
-    template_name='segmapp/bio_create.html'
+    template_name='user_detail.html'
     def get_context_data(self,**kwargs):
         context=super(BioDetail,self).get_context_data(**kwargs)
-        # if context['object'].user!=self.request.user or context['object'].user!
-        context['followers']=models.Relation.objects.filter(following=self.request.user).count()
-        context['following']=models.Relation.objects.filter(follower=self.request.user).count()
+        context['followers']=models.Relation.objects.filter(following=context['object'].user).count()
+        context['following']=models.Relation.objects.filter(follower=context['object'].user).count()
+        f=models.Relation.objects.filter(following=context['object'].user,follower=self.request.user).count()
+        context['user']=context['object'].user
+        context['self']=self.request.user
         return context
+def reject(request,pk):
+    r=models.Request.objects.get(id=pk)
+    r.delete()
+    return render(request,'index.html')
