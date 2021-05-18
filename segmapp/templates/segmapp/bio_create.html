@@ -1,52 +1,24 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block b1 %}
 {%load static%}
-    {% if user.bio %}
-    <div class="container-fluid" width='100%'>
-
-    <div class="row">
-<div class="col-lg-12">
-
-    <div class="container-fluid" id="bio-outer">
-      <div class="row">
-<div class="col-md-5">
-<h1 class="text-center">{{user.username}}</h1>
-</div>
-      </div>
-    <div class="row">
-<div class="col-md-6">
-    <img src="{{user.bio.profile_pic.url}}" id="pic" height="80%"/>
-    <div class="row">
-<div class="col-sm-6" >
-<h4><a href="{%url 'followers' pk=user.id%} " style="color:#fab107">Followers</a></h4><br>
-<h5 class="text-center">{{followers}}</h5>
-</div>
-<div class="col-sm-6">
-  <h4><a href="{%url 'app:following' pk=user.id%}" style="color:#fab107">Following</a></h4><br>
-  <h5 class="text-center">{{following}}</h5>
-
-</div>
+<div class="content-section">
+  <div class="media">
+    <img class="rounded-circle account-img" src="{{ user.bio.profile_pic.url }}">
+    <div class="media-body">
+      <h2 class="account-heading">{{ user.username }}</h2>
+      <p class="text-secondary">{{ user.email }}</p>
     </div>
-</div>
-<div class="col-md-6">
-  <div class="bio_text">
-    {{user.bio.text}}
   </div>
+  <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Profile Info</legend>
+          {{ form|crispy }}
+      </fieldset>
+      <div class="form-group">
+          <button class="btn btn-outline-info" type="submit">Update</button>
+      </div>
+  </form>
 </div>
-    </div>
-    <br>
-        </div>
-            </div>
-          <img src="{% static 'like.jpeg'%}" id='like'height="90%" width="65%"/>
-        </div>
-
-            </div>
-    {% else %}
-    <h1>Welcome {{user.username}}, Fill Following information to complete your Bio</h1>
-    <form class="login-form" method="POST" enctype="multipart/form-data">
-      {%csrf_token%}
-      {{form.as_p}}
-      <input type="submit" class="btn" id="login-submit" value="Save">
-    </form>
-    {% endif %}
 {% endblock %}

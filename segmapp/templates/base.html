@@ -1,86 +1,79 @@
-<!DOCTYPE html>
 {% load static %}
-<html lang="en" dir="ltr">
+<!doctype html>
+<html lang="en">
   <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
 
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
-<link rel="stylesheet" href="{% static 'icon.css' %}" >
-<link rel="stylesheet" href="{% static 'title.css' %}" >
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <title>Segma</title>
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" >
+    <link rel="stylesheet" href="{% static 'icon.css' %}">
+        <title>Segma</title>
+</head>
   <body>
-<section id="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand font-weight-bold" href="{% url 'index' %}"><i class="fas fa-file"></i> Segma</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
 
-    <h1 id="title" >Segma</h1>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'index' %}"><i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
+                    </li>
 
-    </section>
-    <section id="nav-bar">
-        <nav class="navbar navbar-expand-lg ">
-            <div class="container-fluid">
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav">
-                <span class="navbar-toggler-icon">  </span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav navbar-collapse">
-                  <li class="nav-item" >
-                    {% if user.bio %}
-                    <a class="nav-link"  href="{% url 'biodetail' pk=user.id %}">Profile</a>
-                    {% else %}
-                    <a class="nav-link"  href="{% url 'bio' %}">Profile</a>
-                    {% endif %}
-                  </li>
-                  {% if b or user.is_authenticated %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'app:posts' pk=user.id%}">Posts</a>
-                  </li>
-                  <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Social
+
+
+                  </ul>
+                  <!------{{ request.get_host }}/blog/search/-->
+                  <form class="form-inline my-2 my-lg-0" action='{% url "search"%}' method='GET'>
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" name="s">
+                    <button type="submit" class=" text-white my-color btn-primary"><i class="fa fa-search"></i></button>
+                </form>
+
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'app:posts' pk=user.id %}" class="btn text-white m-2"><i class="fas fa-user-shield"></i> My Post</a>
+        <div class="dcontainer">
+
+
+        <a class=" btn text-white m-2 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-user"></i>   Social
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'requests'%}">Pending Requests</a>
           <a class="dropdown-item" href="{% url 'app:following' pk=user.id%}">Following</a>
           <a class="dropdown-item" href="{% url 'followers' pk=user.id%}">Followers</a>
         </div>
-      </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{%url 'logout'%}" style="margin-right:50px">Logout</a>
-                  </li>
-                  <form class="form-inline my-2 my-lg-0" action='{% url "search"%}' method='GET'>
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" name="s">
-      <button class="btn" id='login-submit' type="submit">Search</button>
-    </form>
-                  {% else %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login'%}">Login</a>
-                  </li>
+  </div>
+                    {%if user.bio %}
+                      <a href="{% url 'bioupdate' pk=user.id%} " class="btn text-white m-2"><i class="fas fa-user"></i> {{ user.username }}</a>
+                    {% else %}
+                    <a href="{% url 'bio' %} " class="btn text-white m-2"><i class="fas fa-user"></i> {{ user.username }}</a>
+                    {% endif%}
+                    <a href="{% url 'logout' %} " class="btn text-white m-2"><i class="fas fa-sign-out-alt"></i> Log Out</a>
 
+                    {% else %}
+                    <a href="{% url 'login' %} " class="btn text-white m-2"><i class="fas fa-user-tie"></i> Log In</a>
+
+                    <a href="{% url 'signup' %} " class="btn text-white m-2"> <i class="fas fa-sign-in-alt"></i> Sign Up</a>
                     {% endif %}
-                </ul>
-              </div>
-            </div>
-          </nav>
-    </section>
 
+                </div>
+              </nav>
+      <div class="container my-bg">
+    {% block b1 %}
 
-
-
-
-    <div id="block">
-          <div class="row">
-<div class="col-lg-7">
-      {% block b1 %}
-
-      {% endblock %}
+    {% endblock  %}
 </div>
-    </div>
-    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{% static 'main.js' %}"></script>
   </body>
 </html>

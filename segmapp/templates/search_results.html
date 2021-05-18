@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block b1 %}
 {%load static%}
-<ol>
-
-{% for object in object_list%}
-<li><a href="{% url 'profile' pk=object.id%} " style="color:#fc037f">{{object.username}}</a></li>
-<br>
-
-</ol>
-{% endfor %}
+<h1 class="mb-3">Search Results for {{ s }}</h1>
+    <ol class="mr-auto">
+    {% for i in object_list %}
+        <article class="media content-section">
+          <li class="mr-auto"><a href="{%url 'biodetail' pk=i.id %} "class='article-title'>{{i.username}}</a></li>
+        </article>
+    {% endfor %}
+    </ol>
 {% endblock %}

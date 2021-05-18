@@ -13,7 +13,7 @@ class UserCreateForm(UserCreationForm):
 class PostEditForm(forms.ModelForm):
     class Meta:
         model = models.Post
-        fields=('title','text','image')
+        fields=('title','text','file')
         widgets={
         'text': forms.Textarea(attrs={"cols":50}),
         # 'image': PictureWidget

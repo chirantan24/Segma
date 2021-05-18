@@ -27,6 +27,7 @@ urlpatterns = [
     path('signup/',views.SignUp.as_view(),name='signup'),
     path('app/',include('segmapp.urls')),
     path('bio/',views.make_bio.as_view(),name='bio'),
+    path('updatebio/<pk>',views.update_bio.as_view(),name='bioupdate'),
     path('biodetail/<pk>',views.BioDetail.as_view(),name='biodetail'),
     path('requests/',views.RequestList.as_view(),name='requests'),
     path('followers/<pk>',views.Followerlist.as_view(),name='followers'),

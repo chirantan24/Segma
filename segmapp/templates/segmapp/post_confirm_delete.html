@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% block b1 %}
-<form class="login-form" method="post">
-{%csrf_token%}
-{{form.as_p}}
-<p><font size=32>Are You Sure You Want to Delete this post??</font></p>
-<input type="submit" class="btn btn-danger" value="Confirm">
-<a href="{%url 'app:detail' pk=object.id %}" class='btn btn-success'>Cancel</a>
-</form>
+<div class="content-section">
+      <form method="POST">
+          {% csrf_token %}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Delete Post</legend>
+              <h2>Are you sure you want to delete the post "{{ object.title }}"</h2>
+          </fieldset>
+          <div class="form-group">
+              <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+              <a class="btn btn-outline-secondary" href="{%url 'app:detail' pk=object.id %}">Cancel</a>
+          </div>
+      </form>
+  </div>
 {% endblock %}

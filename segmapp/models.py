@@ -1,12 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+import os
 class Post(models.Model):
     writer=models.ForeignKey(User,null=True,on_delete=models.CASCADE);
     title=models.CharField(max_length=2000,null=True);
     text=models.CharField(max_length=10000);
     time_created=models.DateTimeField(null=True);
-    image=models.ImageField(upload_to='pics/',blank=True,null=True);
+    file = models.FileField(null=True,blank=True,upload_to='files')
+
+    def extension(self):
+        name, extension = os.path.splitext(self.file.name)
+        return extension
 # Create your models here.
 
 class Comment(models.Model):

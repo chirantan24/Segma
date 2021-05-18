@@ -13,7 +13,7 @@ from django.http import Http404
 import time
 def index(request):
     b=request.user.is_authenticated
-    return render(request,'index.html',context={'b':b,})
+    return render(request,'index.html',context={'b':b,'user':request.user})
 class SignUp(CreateView):
     form_class = forms.UserCreateForm
     template_name='signup.html'
@@ -22,8 +22,13 @@ class CreatePost(LoginRequiredMixin,CreateView):
     login_url='login'
     template_name='createpost.html'
     model=models.Post
-    fields=('title','text','image')
-    success_url=reverse_lazy('app:posts')
+    fields=('title','text','file')
+    success_url=reverse_lazy('index')
+
+    def get_context_data(self,**kwargs):
+        context=super(CreatePost,self).get_context_data(**kwargs)
+        context['user']=self.request.user
+        return context
     def get_form(self, form_class=None):
         form = super(CreatePost, self).get_form(form_class)
         form.fields['text'].widget = f.Textarea(attrs={"placeholder" : "Enter your text here..","rows" : 8,"cols":50    },);
@@ -39,6 +44,12 @@ class CreatePost(LoginRequiredMixin,CreateView):
 class ListPosts(LoginRequiredMixin,ListView):
     login_url='login'
     model=models.Post
+    context_object_name = 'posts'
+    paginate_by = 2
+    def get_context_data(self,**kwargs):
+        context=super(ListPosts,self).get_context_data(**kwargs)
+        context['u']=User.objects.get(id=self.kwargs['pk'])
+        return context
     def get_queryset(self,*args,**kwargs):
         return models.Post.objects.all().filter(writer=models.User.objects.get(id=self.kwargs['pk'])).order_by('-time_created');
 class EditPosts(LoginRequiredMixin,UpdateView):
@@ -46,7 +57,7 @@ class EditPosts(LoginRequiredMixin,UpdateView):
     model=models.Post
     template_name='createpost.html'
     form_class=forms.PostEditForm
-    success_url=reverse_lazy('app:Posts')
+    success_url=reverse_lazy('index')
     def get_context_data(self,**kwargs):
         context=super(EditPosts,self).get_context_data(**kwargs)
         if context['object'].writer == self.request.user:
@@ -66,7 +77,7 @@ class DetailPosts(LoginRequiredMixin,DetailView):
 class PostsDelete(LoginRequiredMixin,DeleteView):
     model=models.Post;
     login_url='login'
-    success_url=reverse_lazy('app:posts')
+    success_url=reverse_lazy('index')
     def get_context_data(self,**kwargs):
         context=super(PostsDelete,self).get_context_data(**kwargs)
         print (context)
@@ -93,7 +104,7 @@ def comment(request,slug):
             # return reverse_lazy('app:comment',kwargs={'slug':post.id})
     else:
         c=forms.CommentForm()
-    return render(request,'segmapp/comment.html',context={'form':c,'user':request.user.username,'post':post,'object':post,'b':True,'l':True})
+    return render(request,'segmapp/comment.html',context={'form':c,'user':request.user,'post':post,'object':post,'b':True,'l':True})
 class DeleteComment(LoginRequiredMixin,DeleteView):
     model=models.Comment
     login_url='login'
@@ -110,7 +121,12 @@ class DeleteComment(LoginRequiredMixin,DeleteView):
 class SearchResults(LoginRequiredMixin,ListView):
     model=User
     login_url='login'
+    paginate_by =4 
     template_name='search_results.html'
+    def get_context_data(self,**kwargs):
+        context=super(SearchResults,self).get_context_data(**kwargs)
+        context['s']=self.request.GET.get('s');
+        return context;
     def get_queryset(self):
         s=self.request.GET.get('s')
         return User.objects.filter(username__icontains=s)
@@ -133,6 +149,7 @@ def follow(request,pk):
     return render(request,'index.html')
 class RequestList(LoginRequiredMixin,ListView):
     model=models.Request
+    paginate_by =4
     login_url='login'
     def get_queryset(self):
         user=self.request.user
@@ -161,6 +178,7 @@ class Followerlist(LoginRequiredMixin,ListView):
     model=models.Relation
     login_url='login'
     template_name='segmapp/followerlist.html'
+    paginate_by =4
     def get_queryset(self):
         return models.Relation.objects.filter(following=self.kwargs['pk'])
 
@@ -168,10 +186,22 @@ class Followinglist(LoginRequiredMixin,ListView):
     model=models.Relation
     login_url='login'
     template_name='segmapp/followinglist.html'
+    paginate_by =4
     def get_queryset(self):
         return models.Relation.objects.filter(follower=self.kwargs['pk'])
 
 class make_bio(LoginRequiredMixin,CreateView):
+    model=models.Bio
+    login_url='login'
+    template_name='segmapp/bio_create.html'
+    success_url=reverse_lazy('index')
+    form_class=forms.BioForm
+    def form_valid(self,form):
+        self.object=form.save(commit=False)
+        self.object.user=self.request.user;
+        self.object.save()
+        return super(make_bio,self).form_valid(form)
+class update_bio(LoginRequiredMixin,UpdateView):
     model=models.Bio
     login_url='login'
     template_name='segmapp/bio_create.html'
@@ -190,9 +220,9 @@ class BioDetail(LoginRequiredMixin,DetailView):
         context=super(BioDetail,self).get_context_data(**kwargs)
         context['followers']=models.Relation.objects.filter(following=context['object'].user).count()
         context['following']=models.Relation.objects.filter(follower=context['object'].user).count()
-        f=models.Relation.objects.filter(following=context['object'].user,follower=self.request.user).count()
-        context['user']=context['object'].user
-        context['self']=self.request.user
+        context['f']=models.Relation.objects.filter(following=context['object'].user,follower=self.request.user).count()
+        context['u']=context['object'].user
+        context['user']=self.request.user
         return context
 def reject(request,pk):
     r=models.Request.objects.get(id=pk)
