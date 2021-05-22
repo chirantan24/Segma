@@ -1,42 +1,7 @@
 {% extends 'base.html' %}
 {% block b1 %}
 {%load static%}
-<!-- <div class="row">
-  <div class="col-sm-10">
 
-    {% if object.image %}
-    <div class="container" style="margin-top:50px;margin-bottom:50px">
-
-      <img src="{{object.image.url}}" alt="Hello" width="60%" height="50%" />
-    </div>
-    {% endif %}
-    <pre id="content">{{ object.text }}<br><br><br></pre>
-    <p id="i1" class="font-weight-bold">Posted on : {{object.time_created}}</p>
-    <h1>Comments:</h1>
-      {% for i in post.comments.all %}
-    <div class="comment">
-
-      <h2>{{i.text}}</h2>
-      <h4>Commented by : {{i.commenter}}</h4>
-      <h4>Date and Time : {{i.time_created}}</h4>
-      <a href="delete/{{i.id}}"><img src="{% static 'delcom.png' %}" height=70 class="border"/></a>
-      <br>
-
-    </div>
-    {% empty %}
-    <h4>No comments Yet!!</h4>
-      {% endfor %}
-      <br><br>
-
-
-{% if not b%}
-    <a href="comment/{{object.id}}"><img src="{% static 'comment.jpeg' %}" height=80 class='border'/></a>
-{% endif %}
-    <a href="edit/{{object.id}}"><img src="{% static 'download.jpg' %}" height=80 class='border'/></a>
-    <a href="delete/{{object.id}}"><img src="{% static 'delete.jpeg' %}" height=80 class='border'/></a>
-
-  </div>
-</div> -->
 <div class="jumbotron mt-3 shadow-lg">
 <article class="media content-section shadow ">
    <a href="{{ object.writer.bio.profile_pic.url }} " target="_blank"> <img src="{{ object.writer.bio.profile_pic.url }}  " alt="" class="article-img rounded-circle img-thumbnail img-fluid">

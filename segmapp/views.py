@@ -11,9 +11,26 @@ from django.views.generic import TemplateView,CreateView,DeleteView,ListView,Det
 from django.utils import timezone
 from django.http import Http404
 import time
-def index(request):
-    b=request.user.is_authenticated
-    return render(request,'index.html',context={'b':b,'user':request.user})
+class index(LoginRequiredMixin,ListView):
+    login_url='login'
+    model=models.Post
+    template_name='index.html'
+    context_object_name = 'posts'
+    paginate_by = 3
+    def get_context_data(self,**kwargs):
+        context=super(index,self).get_context_data(**kwargs)
+        context['b']=self.request.user.is_authenticated
+        context['user']=self.request.user
+        return context
+    def get_queryset(self,*args,**kwargs):
+        public=models.Bio.objects.filter(private=False)
+        users=[self.request.user]
+        for i in public:
+            users.append(i.user)
+        following=models.Relation.objects.filter(follower=self.request.user)
+        for i in following:
+            users.append(i.following)
+        return models.Post.objects.filter(writer__in=users).order_by('-time_created')
 class SignUp(CreateView):
     form_class = forms.UserCreateForm
     template_name='signup.html'
@@ -45,7 +62,7 @@ class ListPosts(LoginRequiredMixin,ListView):
     login_url='login'
     model=models.Post
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 3
     def get_context_data(self,**kwargs):
         context=super(ListPosts,self).get_context_data(**kwargs)
         context['u']=User.objects.get(id=self.kwargs['pk'])
@@ -70,7 +87,8 @@ class DetailPosts(LoginRequiredMixin,DetailView):
     model=models.Post
     def get_context_data(self,**kwargs):
         context=super(DetailPosts,self).get_context_data(**kwargs)
-        if context['object'].writer == self.request.user:
+        f=models.Relation.objects.filter(follower=self.request.user,following=context['object'].writer).count()
+        if context['object'].writer == self.request.user or f:
             return context
         else:
             raise Http404
@@ -121,7 +139,7 @@ class DeleteComment(LoginRequiredMixin,DeleteView):
 class SearchResults(LoginRequiredMixin,ListView):
     model=User
     login_url='login'
-    paginate_by =4 
+    paginate_by =4
     template_name='search_results.html'
     def get_context_data(self,**kwargs):
         context=super(SearchResults,self).get_context_data(**kwargs)
@@ -172,7 +190,7 @@ class RequestDetail(LoginRequiredMixin,DetailView):
         a=models.Relation.objects.filter(following=context['object'].by).count()
         context['following']=b
         context['followers']=a
-        context['user']=context['object'].by
+        context['u']=context['object'].by
         return context
 class Followerlist(LoginRequiredMixin,ListView):
     model=models.Relation

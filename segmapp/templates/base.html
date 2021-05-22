@@ -37,6 +37,7 @@
 
                     {% if user.is_authenticated %}
                     <a href="{% url 'app:posts' pk=user.id %}" class="btn text-white m-2"><i class="fas fa-user-shield"></i> My Post</a>
+                      <a href="{% url 'app:create'%}" class="btn text-white m-2"><i class="fas fa-user-edit"></i> New Post</a>
         <div class="dcontainer">
 
 

@@ -36,3 +36,4 @@ class Bio(models.Model):
     user=models.OneToOneField(User,related_name='bio',on_delete=models.CASCADE,primary_key=True);
     profile_pic=models.ImageField(upload_to='profile_pics/',blank=True,null=True);
     text=models.CharField(max_length=10000)
+    private=models.BooleanField(default=False)
