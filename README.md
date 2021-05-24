@@ -14,4 +14,4 @@
 </ul>
 
 <h2>Have Experience here:</h2>
-<a href="rio.pythonanywhere.com"> RIO.pythonanywhere.com</a>
+<a href="http://rio.pythonanywhere.com/"> RIO.pythonanywhere.com</a>
