@@ -26,3 +26,9 @@
 </ul>
 <h2>Have Experience here:</h2>
 <a href="http://rio.pythonanywhere.com/"> RIO.pythonanywhere.com</a>
+<h4>To-Do : </h4>
+<ul>
+    <li>Add chat feature</li>
+    <li>Add voice-call,video-call feature</li>
+    <li>Add google authentication for sign-in</li>
+</ul>
