@@ -12,7 +12,7 @@
     <li>django-crispy-forms</li>
     <li>Pillow</li>
 </ul>
-<h4>Features:</h4>
+<h2>Features:</h2>
 <ul>
     <li>User can signup and login.</li>
     <li>After logging in user can update Bio including profile picture and profile privacy.</li>
@@ -26,7 +26,7 @@
 </ul>
 <h2>Have Experience here:</h2>
 <a href="http://rio.pythonanywhere.com/"> RIO.pythonanywhere.com</a>
-<h4>To-Do : </h4>
+<h2>To-Do : </h2>
 <ul>
     <li>Add chat feature</li>
     <li>Add voice-call,video-call feature</li>
